@@ -11,3 +11,6 @@ class BTCRate(Base):
     close_price = Column(Numeric)
     volume = Column(Integer)
     market_cap = Column(Numeric)
+
+    def __repr__(self):
+        return f'<BTCRate object for date={self.date}>'
