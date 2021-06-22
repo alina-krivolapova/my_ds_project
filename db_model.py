@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, DateTime, Numeric
+from sqlalchemy import Column, Integer, DateTime, Numeric, String
 from db import Base
 
 
@@ -14,3 +14,13 @@ class BTCRate(Base):
 
     def __repr__(self):
         return f'<BTCRate object for date={self.date}>'
+
+
+class News(Base):
+    __tablename__ = 'news'
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime)
+    news_text = Column(String)
+
+    def __repr__(self):
+        return f'<News object for date={self.date}>'
