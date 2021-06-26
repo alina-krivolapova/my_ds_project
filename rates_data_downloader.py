@@ -7,7 +7,7 @@ from typing import List, Dict
 
 from data_provider import DataProvider
 
-LIST_OF_COLUMNS = ["date", "open_price", "high_price", "low_price", "close_price", "volume", "market_cap"]
+COLUMN_TITLES = ["date", "open_price", "high_price", "low_price", "close_price", "volume", "market_cap"]
 
 
 class RatesDataProvider(DataProvider):
@@ -22,7 +22,7 @@ class RatesDataProvider(DataProvider):
         self.raw_rates = soup.find('table', {'class': re.compile('^cmc-table.*')}).find("tbody").find_all("tr")
 
     @staticmethod
-    def get_date_like_datetime(text: str) -> datetime:
+    def convert_date(text: str) -> datetime:
         """ Change format for date field."""
         return datetime.strptime(text, '%b %d, %Y')
 
@@ -37,10 +37,10 @@ class RatesDataProvider(DataProvider):
         rates = []
         for rate in initial_rates:
             day_prices = {}
-            for value, column in zip(rate.find_all("td"), LIST_OF_COLUMNS):
+            for value, column in zip(rate.find_all("td"), COLUMN_TITLES):
                 text = value.text.split("$")[1] if value.text.startswith("$") else value.text
                 if column == "date":
-                    day_prices[column] = self.get_date_like_datetime(text)
+                    day_prices[column] = self.convert_date(text)
                 else:
                     day_prices[column] = text.replace(",", "")
             rates.append(day_prices)

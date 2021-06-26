@@ -7,7 +7,7 @@ from typing import List, Dict, Union
 
 from data_provider import DataProvider
 
-PATTERN = "https://www.theguardian.com/technology/elon-musk"
+URL_PATTERN = "https://www.theguardian.com/technology/elon-musk"
 
 
 class NewsDataProvider(DataProvider):
@@ -36,14 +36,14 @@ class NewsDataProvider(DataProvider):
     @staticmethod
     def generate_list_of_pages(num_of_pages: int) -> List[str]:
         """ Create list of pages urls based on pattern."""
-        list_of_pages = list()
-        list_of_pages.append(PATTERN)
+        list_of_pages = []
+        list_of_pages.append(URL_PATTERN)
         for i in range(2, num_of_pages + 1):
-            list_of_pages.append(PATTERN + f"?page={i}")
+            list_of_pages.append(URL_PATTERN + f"?page={i}")
         return list_of_pages
 
     @staticmethod
-    def get_date_like_datetime(text: str) -> datetime:
+    def convert_date(text: str) -> datetime:
         """Return date in datetime format.
 
         Example:
@@ -59,10 +59,10 @@ class NewsDataProvider(DataProvider):
         """
         src = self.download_data_from_site(url)
         soup = bs4.BeautifulSoup(src, "lxml")
-        news = dict()
+        news = {}
         # in other articles it's hard to identify date
         if soup.find("label", attrs={"for": "dateToggle"}):
-            news["date"] = self.get_date_like_datetime(soup.find("label", attrs={"for": "dateToggle"}).text)
+            news["date"] = self.convert_date(soup.find("label", attrs={"for": "dateToggle"}).text)
             news["news_text"] = soup.find("div",
                                           class_=re.compile(
                                               "^article-body-commercial-selector article-body-viewer-selector .*")).text
