@@ -17,7 +17,7 @@ class DataProvider(ABC):
 
     @staticmethod
     @abstractmethod
-    def get_date_like_datetime(text: str) -> datetime:
+    def convert_date(text: str) -> datetime:
         """ Change format for date field."""
         pass
 
